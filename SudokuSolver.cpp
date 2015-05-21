@@ -53,7 +53,7 @@ void SudokuSolver::printRowCol(int r, int c)
 	{
 		q = 2;
 	}
-	if(gameBoard[r][c].elem == 0)
+	if(gameBoard[q][c].elem == 0)
 	{
 		if(r%3 == 1)
 		{
