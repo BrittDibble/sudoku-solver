@@ -12,16 +12,8 @@ struct Cell
 class SudokuSolver
 {
 	private:
-	Cell gameBoard[3][3];
+	Cell gameBoard[81];
 	
-	/* Purpose: To be used by printBoard. Given the row number it prints out that row of the board.
-	How to Call: Give the integer of the row to be printed, starting from 1 and going to 9.
-	*/
-	void printRow(int);
-	/* Purpose: To be used by printRow. Prints out a small section of the row based on the column entered.
-	How to Call: Give the integer for the row and the column to be printed out.
-	*/
-	void printRowCol(int, int);
 
 	public:
 	
