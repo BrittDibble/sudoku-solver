@@ -8,6 +8,27 @@ using namespace std;
 #include <iostream>
 int main()
 {
+	bool cont = true; //continue
+	
+	int x;
+	int y;
+	int number;
+	
 	SudokuSolver game;
-	game.printBoard();//prints out the board
+	
+	while(cont)
+	{
+		game.printBoard();//prints out the board
+		cout << "Please enter the x, y, and the number in that order and pressing enter in-between.\n";
+		cout << "Enter 0 for the last to exit.\n";
+		cin >> x;
+		cin >> y;
+		cin >> number;
+		
+		game.enterNumber(x,y,number);
+		if(number == 0)
+		{
+			cont = false;
+		}
+	}
 }
