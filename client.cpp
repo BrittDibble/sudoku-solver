@@ -25,7 +25,8 @@ int main()
 		cin >> x;
 		cin >> y;
 		cin >> number;
-		
+		x--;
+		y--;
 		game.enterNumber(x,y,number);
 		if(number == 0)
 		{
