@@ -10,13 +10,14 @@ int main()
 {
 	bool cont = true; //continue
 	
+	int counter = 0;
 	int x;
 	int y;
 	int number;
 	
 	SudokuSolver game;
 	
-	while(cont)
+	while(cont && counter < 100)
 	{
 		game.printBoard();//prints out the board
 		cout << "Please enter the x, y, and the number in that order and pressing enter in-between.\n";
@@ -30,5 +31,6 @@ int main()
 		{
 			cont = false;
 		}
+		counter ++;
 	}
 }

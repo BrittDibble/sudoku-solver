@@ -13,8 +13,10 @@ class SudokuSolver
 {
 	private:
 	Cell gameBoard[81];
-	
-
+	/* Purpose: To be used by the printBoard. Prints out the row of the board including pencil marks.
+	How to Call: Provide the row number from 0 to 26;
+	*/
+	void printRow(int);
 	public:
 	
 	SudokuSolver(); //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
