@@ -26,11 +26,11 @@ SudokuSolver::~SudokuSolver()
 belongs to.
 How to Call: Provide the x and y cords and then the number.
 */
-void SudokuSolver::updateSquare(int x, int y, int number)
+void SudokuSolver::updateSquare(int& x, int& y, int& number)
 {
 	int index = x * 9 + y;
 	int temp;
-	for(int i = 0; i < 9; i++)//Need to come back and fix this.
+	for(int i = 0; i < 9; i++)
 	{
 		if(i < 3)
 		{
@@ -168,5 +168,74 @@ void SudokuSolver::printBoard()
 	}
 	cout << aString;
 	cout << aString;
+	return;
+}
+/* Purpose: Sets the entered bool to true if there are no 0 elements in the array. Sets to false otherwise.
+How to Call: Provide a bool to be set.
+*/
+void SudokuSolver::isFinished(bool& aBool)
+{
+	for(int i = 0; i < 81; i++)
+	{
+		if(gameBoard[i].elem == 0)
+		{
+			aBool = false;
+			return;
+		}
+	}
+	aBool = true;
+	return;
+}
+/* Purpose: Solve the current sudoku board.
+*/
+void SudokuSolver::solve()
+{
+	int counter = 0;
+	bool temp = true;
+	while(temp)
+	{
+		onlyOptionCheck(temp);
+	}
+	isFinished(temp);
+	if(!temp)
+	{
+		cout << "Solve was unable to complete the puzzle.\n";
+	}
+	return;
+}
+/* Purpose: To be used by solve. Checks each element of the gameBoard one at a time to see if it
+only has one valid pencil mark. Returns true if it makes any changes.
+How to Call: Provide a boolean to be set to true if something is changed by this.
+*/
+void SudokuSolver::onlyOptionCheck(bool& aBool)
+{
+	int temp;
+	aBool = false;
+	for(int i = 0; i < 81; i++)
+	{
+		temp = 0;
+		if(gameBoard[i].elem == 0)
+		{
+			for(int j = 0; j < 9; j++)
+			{
+				if(gameBoard[i].pencil[j] != 0)
+				{
+					temp++;
+				}
+			}
+			if(temp == 1)
+			{
+				for(int j = 0; j < 9; j++)
+				{
+					if(gameBoard[i].pencil[j] != 0)
+					{
+						enterNumber((i/9),(i-((i/9)*9)),(j+1));
+						aBool = true;
+					}
+				}	
+			}
+		}
+		
+	}
 	return;
 }
