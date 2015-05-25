@@ -27,6 +27,12 @@ class SudokuSolver
 	How to Call: Provide a boolean to be set to true if something is changed by this.
 	*/
 	void onlyOptionCheck(bool&);
+	
+	void rowOnlyOptionCheck(bool&, int);
+	
+	void columnOnlyOptionCheck(bool&, int);
+	
+	void squareOnlyOptionCheck(bool&, int);
 	public:
 	
 	SudokuSolver(); //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
