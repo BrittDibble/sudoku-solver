@@ -21,7 +21,18 @@ class SudokuSolver
 	belongs to.
 	How to Call: Provide the x and y cords and then the number.
 	*/
-	void updateSquare(int, int, int);
+	void updateSquare(int&, int&, int&);
+	/* Purpose: To be used by solve. Checks each element of the gameBoard one at a time to see if it
+	only has one valid pencil mark. Returns true if it makes any changes.
+	How to Call: Provide a boolean to be set to true if something is changed by this.
+	*/
+	void onlyOptionCheck(bool&);
+	
+	void rowOnlyOptionCheck(bool&, int);
+	
+	void columnOnlyOptionCheck(bool&, int);
+	
+	void squareOnlyOptionCheck(bool&, int);
 	public:
 	
 	SudokuSolver(); //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
@@ -34,4 +45,11 @@ class SudokuSolver
 	/* Purpose: Prints out the gameBoard and the pencil marks in a readable format. 
 	*/
 	void printBoard();
+	/* Purpose: Solve the current sudoku board.
+	*/
+	void solve();
+	/* Purpose: Sets the entered bool to true if there are no 0 elements in the array. Sets to false otherwise.
+	How to Call: Provide a bool to be set.
+	*/
+	void isFinished(bool&);
 };
