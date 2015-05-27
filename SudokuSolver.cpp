@@ -170,6 +170,170 @@ void SudokuSolver::printBoard()
 	cout << aString;
 	return;
 }
+/* Purpose: To be used by solve. It updates the pencil marks in case the only possibility for a certain number is in only one square.
+How to Call: provide a boolean that can be changed to true if the function changes anything.
+*/
+void SudokuSolver::pencilLogicUpdate(bool& somethingWasChanged)
+{
+	int numberOfTimes;
+	int xOffset;
+	int rowAndColumnNumber;
+	for(int numberBeingChecked = 0; numberBeingChecked < 9; numberBeingChecked++)
+	{
+		for(int squareBeingChecked = 0; squareBeingChecked < 9; squareBeingChecked++)
+		{
+			numberOfTimes = 0;
+			if(squareBeingChecked < 3)
+			{
+				xOffset = 0;
+			}
+			else if(squareBeingChecked < 6)
+			{
+				xOffset =27;
+			}
+			else
+			{
+				xOffset = 54;
+			}
+			for(int i = 0; i < 3; i++)
+			{
+				if(gameBoard[xOffset + i + (squareBeingChecked % 3) * 3].pencil[numberBeingChecked] != 0)
+				{
+					numberOfTimes++;
+				}
+				if(gameBoard[9 + xOffset + i + (squareBeingChecked % 3) * 3].pencil[numberBeingChecked] != 0)
+				{
+					numberOfTimes++;
+				}
+				if(gameBoard[18 + xOffset + i + (squareBeingChecked % 3) * 3].pencil[numberBeingChecked] != 0)
+				{
+					numberOfTimes++;
+				}
+			}
+			if(numberOfTimes < 4 && numberOfTimes != 0)
+			{
+				checkAndUpdateSquareColumns(squareBeingChecked, numberBeingChecked, numberOfTimes, somethingWasChanged);
+				checkAndUpdateSquareRows(squareBeingChecked, numberBeingChecked, numberOfTimes, somethingWasChanged);
+			}
+		}
+	}
+}
+/* Purpose: To be used by pencilLogicUpdate. Checks the rows of a certain square for a number.
+How to Call: provide the square, the amount a number occurs, the number, and the boolean to be set.
+*/
+void SudokuSolver::checkAndUpdateSquareRows(int& square, int& number, int& occurence, bool& somethingChanged)
+{
+	int counter;
+	int offset;
+	int row;
+	int index;
+	if(square < 3)
+	{
+		offset = 0;
+		row = 0;
+	}
+	else if(square < 6)
+	{
+		offset = 27;
+		row = 3;
+	}
+	else
+	{
+		offset = 54;
+		row = 6;
+	}
+	for(int rowNumber = 0; rowNumber < 3; rowNumber++)
+	{
+		counter = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			if(gameBoard[i + offset + (square%3)*3 + rowNumber * 9].pencil[number] !=0)
+			{
+				counter++;
+			}//else nothing
+		}
+		if(counter > 0 && counter < occurence)
+		{
+			return;//nothing can be done by this function in this case
+		}
+		else if(counter == occurence)
+		{
+			row = row + rowNumber;
+			
+			for(int i = 0; i < 9; i++)
+			{
+				index = row * 9 + i;
+				if(gameBoard[index].pencil[number] != 0 
+				&& (index != (offset + (square%3)*3 + rowNumber * 9) 
+				&& index != (1 + offset + (square%3)*3 + rowNumber * 9) 
+				&& index != (2 + offset + (square%3)*3 + rowNumber * 9 )))
+				{
+					somethingChanged = true;
+					gameBoard[index].pencil[number] = 0; 
+				}
+			}
+			return;
+		}
+		//else, loops
+	}
+	return;
+}
+/* Purpose: To be used by pencilLogicUpdate. Checks the columns of a certain square for a number.
+How to Call: provide the square, the amount a number occurs, the number, and the boolean to be set.
+*/
+void SudokuSolver::checkAndUpdateSquareColumns(int& square, int& number, int& occurence, bool& somethingChanged)
+{
+	int counter;
+	int offset;
+	int column;
+	int index;
+	if(square < 3)
+	{
+		offset = 0;
+	}
+	else if(square < 6)
+	{
+		offset = 27;
+	}
+	else
+	{
+		offset = 54;
+	}
+	for(int columnNumber = 0; columnNumber < 3; columnNumber++)
+	{
+		counter = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			if(gameBoard[i * 9 + columnNumber + (square % 3) * 3 + offset].pencil[number] !=0)
+			{
+				counter++;
+			}//else nothing
+		}
+		if(counter > 0 && counter < occurence)
+		{
+			return;//nothing can be done by this function in this case
+		}
+		else if(counter == occurence)
+		{
+			column = (square % 3) * 3 + columnNumber;
+			for(int i = 0; i < 9; i++)
+			{
+				index = column + i * 9;
+				if(gameBoard[index].pencil[number] != 0
+				&& index != offset + column
+				&& index != 9 + offset + column
+				&& index != 18 + offset + column)
+				{
+					somethingChanged = true;
+					gameBoard[index].pencil[number] = 0; 
+				}
+			}
+			return;
+		}
+		//else, loops
+	}
+	return;
+}
 /* Purpose: Sets the entered bool to true if there are no 0 elements in the array. Sets to false otherwise.
 How to Call: Provide a bool to be set.
 */
@@ -192,9 +356,9 @@ void SudokuSolver::solve()
 {
 	int i;
 	bool temp = true;
-	while(temp)
+	int counter = 0;
+	while(temp && counter < 500)
 	{
-		
 		temp = false;
 		onlyOptionCheck(temp);
 		for(i = 0; i < 9; i++)
@@ -203,6 +367,8 @@ void SudokuSolver::solve()
 			columnOnlyOptionCheck(temp, i);
 			squareOnlyOptionCheck(temp, i);
 		}
+		pencilLogicUpdate(temp);
+		counter ++;
 	}
 	isFinished(temp);
 	if(!temp)
