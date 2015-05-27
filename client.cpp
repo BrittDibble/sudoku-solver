@@ -117,13 +117,38 @@ int main()
 	cout << "\n";
 	game2.solve();
 	game2.printBoard();
-	/*//extreme level
+	//extreme level
 	cout << "extreme\n";
 	SudokuSolver game3;
-	game3.enterNumber(,,);
+	game3.enterNumber(5,0,1);
+	game3.enterNumber(1,1,3);
+	game3.enterNumber(4,1,2);
+	game3.enterNumber(6,1,4);
+	game3.enterNumber(8,1,9);
+	game3.enterNumber(1,2,9);
+	game3.enterNumber(3,2,4);
+	game3.enterNumber(6,2,8);
+	game3.enterNumber(2,3,3);
+	game3.enterNumber(5,3,5);
+	game3.enterNumber(7,3,8);
+	game3.enterNumber(8,3,6);
+	game3.enterNumber(1,4,7);
+	game3.enterNumber(7,4,4);
+	game3.enterNumber(0,5,8);
+	game3.enterNumber(1,5,6);
+	game3.enterNumber(3,5,1);
+	game3.enterNumber(6,5,3);
+	game3.enterNumber(2,6,9);
+	game3.enterNumber(5,6,3);
+	game3.enterNumber(7,6,1);
+	game3.enterNumber(0,7,5);
+	game3.enterNumber(2,7,2);
+	game3.enterNumber(4,7,1);
+	game3.enterNumber(7,7,7);
+	game3.enterNumber(3,8,8);
 	game3.printBoard();
 	cout << "\n";
 	game3.solve();
-	game3.printBoard(); */
+	game3.printBoard();
 	return 0;
 }
