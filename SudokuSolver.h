@@ -27,12 +27,34 @@ class SudokuSolver
 	How to Call: Provide a boolean to be set to true if something is changed by this.
 	*/
 	void onlyOptionCheck(bool&);
-	
+	/* Purpose: To be used by solve. Checks each row to see if only one location is 
+	possible for a certain number. Changes the given boolean to true if this function 
+	enters any numbers onto the game board.
+	How to Call: Provide a boolean and the row of the number being checked.
+	*/
 	void rowOnlyOptionCheck(bool&, int);
-	
+	/* Purpose: To be used by solve. Checks each column to see if only one location is possible for a certain number. 
+	Changes a given boolean to true if this function enters any numbers into the board.
+	How to Call: Provide a boolean and the column number to be checked.
+	*/
 	void columnOnlyOptionCheck(bool&, int);
-	
+	/* Purpose: To be used by solve. Checks each square section of the sudoku board to see if only one location can take a certain number. 
+	Changes a given boolean to true if the function inputs any numbers onto the board.
+	How to Call: Give a boolean and the number of the square that needs to be checked.
+	*/
 	void squareOnlyOptionCheck(bool&, int);
+	/* Purpose: To be used by solve. It updates the pencil marks in case the only possibility for a certain number is in only one square.
+	How to Call: provide a boolean that can be changed to true if the function changes anything.
+	*/
+	void pencilLogicUpdate(bool&);
+	/* Purpose: To be used by pencilLogicUpdate. Checks the rows of a certain square for a number.
+	How to Call: provide the square, the amount a number occurs, the number, and the boolean to be set.
+	*/
+	void checkAndUpdateSquareRows(int&, int&, int&, bool&);
+	/* Purpose: To be used by pencilLogicUpdate. Checks the columns of a certain square for a number.
+	How to Call: provide the square, the amount a number occurs, the number, and the boolean to be set.
+	*/
+	void checkAndUpdateSquareColumns(int&, int&, int&, bool&);
 	public:
 	
 	SudokuSolver(); //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
