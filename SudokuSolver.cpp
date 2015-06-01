@@ -368,6 +368,7 @@ void SudokuSolver::solve()
 			squareOnlyOptionCheck(temp, i);
 		}
 		pencilLogicUpdate(temp);
+		twinTester(temp);
 		counter ++;
 	}
 	isFinished(temp);
@@ -541,4 +542,205 @@ void SudokuSolver::squareOnlyOptionCheck(bool& somethingWasChanged, int square)
 		}
 	}
 	return;
+}
+/* Purpose: To be used by solve. Checks for twins in all of the rows, columns, and squares.
+How to Call: Provide a boolean to be set to true if the function can change anything.
+*/
+void SudokuSolver::twinTester(bool& wasSomethingChanged)
+{
+	for(int i = 0; i < 9; i++)
+	{
+		twinTesterRow(wasSomethingChanged, i);
+		twinTesterColumn(wasSomethingChanged, i);
+		twinTesterSquare(wasSomethingChanged, i);
+	}
+	return;
+}
+/* Purpose: To be used by solve. Checks for twins in the row of the number provided.
+How to Call: Provide a boolean to be set to true if the function can change anything and an int for the row being checked.
+*/
+void SudokuSolver::twinTesterRow(bool& wasSomethingChanged, int row)//this mess needs to be redone
+{
+	int counter = 0;//temporary counter.
+	for(int i = 0; i < 9; i++)//checks to see if more that 2 squares are open.
+	{
+		if(gameBoard[i + row * 9].elem == 0)
+		{
+			counter ++;
+		}
+	}
+	if(counter > 2)
+	{
+		for(int i = 0; i < 8; i++)//finds if any of the places in the row only have two options.
+		{
+			counter = 0;
+			for(int numberBeingChecked = 0; numberBeingChecked < 9; numberBeingChecked++)
+			{
+				if(gameBoard[i + row * 9].pencil[numberBeingChecked] != 0)
+				{
+					counter ++;
+				}
+			}
+			if(counter == 2)//finds out if any other square share the same two.
+			{
+				for(int restOfTheRow = i + 1; restOfTheRow < 9; restOfTheRow++)
+				{
+					if(compairCells(gameBoard[i + row * 9], gameBoard[restOfTheRow + row * 9]))
+					{
+						wasSomethingChanged = true;
+						for(int number = 0; number < 9; number++)
+						{
+							if(gameBoard[i + row * 9].pencil[number] != 0)
+							{
+								for(int rowCellBeingUpdated = 0; rowCellBeingUpdated < 9; rowCellBeingUpdated++)
+								{
+									if(rowCellBeingUpdated + row * 9 != i + row * 9 && rowCellBeingUpdated + row * 9 != restOfTheRow + row * 9)
+									{
+										gameBoard[rowCellBeingUpdated + row * 9].pencil[number] = 0;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+/* Purpose: To be used by solve. Checks for twins in the column of the number provided.
+How to Call: Provide a boolean to be set to true if the function can change anything and an int for the column being checked.
+*/
+void SudokuSolver::twinTesterColumn(bool& wasSomethingChanged, int column)
+{
+	int counter = 0;//temporary counter.
+	for(int i = 0; i < 9; i++)//checks to see if more that 2 squares are open.
+	{
+		if(gameBoard[i * 9 + column].elem == 0)
+		{
+			counter ++;
+		}
+	}
+	if(counter > 2)
+	{
+		for(int i = 0; i < 8; i++)//finds if any of the places in the column only have two options.
+		{
+			counter = 0;
+			for(int numberBeingChecked = 0; numberBeingChecked < 9; numberBeingChecked++)
+			{
+				if(gameBoard[i * 9 + column].pencil[numberBeingChecked] != 0)
+				{
+					counter ++;
+				}
+			}
+			if(counter == 2)//finds out if any other square share the same two.
+			{
+				for(int restOfTheColumn = i + 1; restOfTheColumn < 9; restOfTheColumn++)
+				{
+					if(compairCells(gameBoard[i * 9 + column], gameBoard[restOfTheColumn * 9 + column]))
+					{
+						wasSomethingChanged = true;
+						for(int number = 0; number < 9; number++)
+						{
+							if(gameBoard[i * 9 + column].pencil[number] != 0)
+							{
+								for(int columnCellBeingUpdated = 0; columnCellBeingUpdated < 9; columnCellBeingUpdated++)
+								{
+									if(columnCellBeingUpdated * 9 + column != i * 9 + column && columnCellBeingUpdated * 9 + column != restOfTheColumn * 9 + column)
+									{
+										gameBoard[columnCellBeingUpdated * 9 + column].pencil[number] = 0;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+/* Purpose: To be used by solve. Checks for twins in the square of the number provided.
+How to Call: Provide a boolean to be set to true if the function can change anything and an int for the square being checked.
+*/
+void SudokuSolver::twinTesterSquare(bool& wasSomethingChanged, int square)
+{
+	int counter = 0;//temporary counter.
+	int offset;
+	if(square < 3)
+	{
+		offset = 0;
+	}
+	else if(square < 6)
+	{
+		offset = 27;
+	}
+	else
+	{
+		offset = 54;
+	}
+	for(int i = 0; i < 9; i++)//checks to see if more that 2 squares are open.
+	{
+		if(gameBoard[offset + (square % 3) * 3 + (i / 3) * 9 + i % 3].elem == 0)
+		{
+			counter ++;
+		}
+	}
+	if(counter > 2)
+	{
+		for(int i = 0; i < 8; i++)//finds if any of the places in the square only have two options.
+		{
+			counter = 0;
+			for(int numberBeingChecked = 0; numberBeingChecked < 9; numberBeingChecked++)
+			{
+				if(gameBoard[offset + (square % 3) * 3 + (i / 3) * 9 + i % 3].pencil[numberBeingChecked] != 0)
+				{
+					counter ++;
+				}
+			}
+			if(counter == 2)//finds out if any other square share the same two.
+			{
+				for(int restOfTheSquare = i + 1; restOfTheSquare < 9; restOfTheSquare++)
+				{
+					if(compairCells(gameBoard[offset + (square % 3) * 3 + (i / 3) * 9 + i % 3], gameBoard[offset + (square % 3) * 3 + (restOfTheSquare / 3) * 9 + restOfTheSquare % 3]))
+					{
+						wasSomethingChanged = true;
+						for(int number = 0; number < 9; number++)
+						{
+							if(gameBoard[offset + (square % 3) * 3 + (i / 3) * 9 + i % 3].pencil[number] != 0)
+							{
+								for(int squareCellBeingUpdated = 0; squareCellBeingUpdated < 9; squareCellBeingUpdated++)
+								{
+									if(offset + (square % 3) * 3 + (squareCellBeingUpdated / 3) * 9 + squareCellBeingUpdated % 3 != offset + (square % 3) * 3 + (i / 3) * 9 + i % 3 && offset + (square % 3) * 3 + (squareCellBeingUpdated / 3) * 9 + squareCellBeingUpdated % 3 != offset + (square % 3) * 3 + (restOfTheSquare / 3) * 9 + restOfTheSquare % 3)
+									{
+										gameBoard[offset + (square % 3) * 3 + (squareCellBeingUpdated / 3) * 9 + squareCellBeingUpdated % 3].pencil[number] = 0;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+/* Purpose: Checks the element of the cells and each of the pencil marks. If they are not the same it returns false.
+This method returns true otherwise.
+How to Call: Give two cells to be compared.
+*/
+bool SudokuSolver::compairCells(Cell fristCell, Cell secondCell)
+{
+	if(fristCell.elem != secondCell.elem)
+	{
+		return false;
+	}
+	for(int i = 0; i < 9; i++)
+	{
+		if(fristCell.pencil[i] != secondCell.pencil[i])
+		{
+			return false;
+		}
+	}
+	return true;
 }
