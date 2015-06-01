@@ -55,6 +55,22 @@ class SudokuSolver
 	How to Call: provide the square, the amount a number occurs, the number, and the boolean to be set.
 	*/
 	void checkAndUpdateSquareColumns(int&, int&, int&, bool&);
+	/* Purpose: To be used by solve. Checks for twins in all of the rows, columns, and squares.
+	How to Call: Provide a boolean to be set to true if the function can change anything.
+	*/
+	void twinTester(bool&);
+	/* Purpose: To be used by solve. Checks for twins in the row of the number provided.
+	How to Call: Provide a boolean to be set to true if the function can change anything and an int for the row being checked.
+	*/
+	void twinTesterRow(bool&, int);
+	/* Purpose: To be used by solve. Checks for twins in the column of the number provided.
+	How to Call: Provide a boolean to be set to true if the function can change anything and an int for the column being checked.
+	*/
+	void twinTesterColumn(bool&, int);
+	/* Purpose: To be used by solve. Checks for twins in the square of the number provided.
+	How to Call: Provide a boolean to be set to true if the function can change anything and an int for the square being checked.
+	*/
+	void twinTesterSquare(bool&, int);
 	public:
 	
 	SudokuSolver(); //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
@@ -74,4 +90,9 @@ class SudokuSolver
 	How to Call: Provide a bool to be set.
 	*/
 	void isFinished(bool&);
+	/* Purpose: Checks the element of the cells and each of the pencil marks. If they are not the same it returns false.
+	This method returns true otherwise.
+	How to Call: Give two cells to be compared.
+	*/
+	bool compairCells(Cell, Cell);
 };
