@@ -2,7 +2,8 @@
 Compiler: g++
 Author: Brittany Dibble 
 */
-
+#include <iostream>
+#include <string>
 struct Cell
 {
   int elem;
@@ -82,7 +83,7 @@ class SudokuSolver
 	void enterNumber(int, int, int);
 	/* Purpose: Prints out the gameBoard and the pencil marks in a readable format. 
 	*/
-	void printBoard();
+	void printBoardWithPencil();
 	/* Purpose: Solve the current sudoku board.
 	*/
 	void solve();
@@ -96,5 +97,9 @@ class SudokuSolver
 	*/
 	bool compairCells(Cell, Cell);
 	
-	SudokuSolver guessBranching(SudokuSolver);
+	void guessBranching(SudokuSolver&);
+	
+	void resetBoard();
+	
+	void printBoard();
 };
