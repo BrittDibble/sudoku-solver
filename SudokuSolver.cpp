@@ -4,7 +4,6 @@ Author: Brittany Dibble
 */
 using namespace std;
 #include "SudokuSolver.h"
-#include <iostream>
 
 SudokuSolver::SudokuSolver() //sets each element of the gameBoard to 0 and fills the pencil array with 1-9.
 {
@@ -151,7 +150,7 @@ void SudokuSolver::printRow(int rowNumber)
 }
 /* Purpose: Prints out the gameBoard and the pencil marks in a readable format. 
 */
-void SudokuSolver::printBoard()
+void SudokuSolver::printBoardWithPencil()
 {
 	string aString = "=||=====================================||=\n";
 	for(int i = 0; i < 27; i++)
@@ -356,8 +355,7 @@ void SudokuSolver::solve()
 {
 	int i;
 	bool temp = true;
-	int counter = 0;
-	while(temp && counter < 500)
+	while(temp)
 	{
 		temp = false;
 		onlyOptionCheck(temp);
@@ -369,12 +367,6 @@ void SudokuSolver::solve()
 		}
 		pencilLogicUpdate(temp);
 		twinTester(temp);
-		counter ++;
-	}
-	isFinished(temp);
-	if(!temp)
-	{
-		cout << "Solve was unable to complete the puzzle.\n";
 	}
 	return;
 }
@@ -743,4 +735,81 @@ bool SudokuSolver::compairCells(Cell fristCell, Cell secondCell)
 		}
 	}
 	return true;
+}
+
+void SudokuSolver::guessBranching(SudokuSolver& aSolver)
+{
+	SudokuSolver tempSolver = aSolver;
+	int counter;
+	bool checkedIfDone;
+	for(int i = 0; i < 81; i++)//goes though the entire array.
+	{
+		if(tempSolver.gameBoard[i].elem == 0)
+		{
+			counter = 0;
+			for(int number = 0; number < 9;  number++)
+			{
+				if(tempSolver.gameBoard[i].pencil[number] != 0)
+				{
+					counter++;
+				}
+			}
+			if(counter == 2)
+			{
+				for(int guessedNumber = 0; guessedNumber < 9; guessedNumber++)
+				{
+					if(tempSolver.gameBoard[i].pencil[guessedNumber] != 0)
+					{
+						tempSolver.enterNumber(i/9,i%9, guessedNumber+1);
+						tempSolver.solve();
+						tempSolver.isFinished(checkedIfDone);
+						if(checkedIfDone)
+						{
+							aSolver = tempSolver;
+							return;
+						}
+						else
+						{
+							tempSolver = aSolver;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void SudokuSolver::resetBoard()
+{
+	for(int i = 0; i < 81; i++)
+	{
+		gameBoard[i].elem = 0;
+		for(int number = 0; number < 9; number++)
+		{
+			gameBoard[i].pencil[number] = number + 1;
+		}
+	}
+}
+
+void SudokuSolver::printBoard()
+{
+	string aString;
+	aString = "=============\n";
+	for(int i = 0; i < 81; i++)
+	{
+		if(i == 0 || i == 27 || i == 54)
+		{
+			cout << aString;
+		}
+		if(i%3 == 0)
+		{
+			cout << "|";
+		}
+		cout << gameBoard[i].elem;
+		if(i%9 == 8)
+		{
+			cout << "|\n";
+		}
+	}
+	cout << aString;
 }

@@ -95,4 +95,6 @@ class SudokuSolver
 	How to Call: Give two cells to be compared.
 	*/
 	bool compairCells(Cell, Cell);
+	
+	SudokuSolver guessBranching(SudokuSolver);
 };
